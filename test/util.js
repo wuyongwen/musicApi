@@ -1,7 +1,7 @@
 export const neteaseMusic = {
     id: 27808044,
     artistId: 11127,
-    playlistId: 483222600,
+    playlistId: 2383437785,
     albumId: 29597,
     translateLyricId: 3026472
 }

@@ -30,8 +30,8 @@ function createSecretKey(size) {
 
 function aesEncrypt(text, secKey) {
   const _text = text
-  const lv = new Buffer('0102030405060708', 'binary')
-  const _secKey = new Buffer(secKey, 'binary')
+  const lv = new Buffer.from('0102030405060708', 'binary')
+  const _secKey = new Buffer.from(secKey, 'binary')
   const cipher = crypto.createCipheriv('AES-128-CBC', _secKey, lv)
   let encrypted = cipher.update(_text, 'utf8', 'base64')
   encrypted += cipher.final('base64')
@@ -45,7 +45,7 @@ function zfill(str, size) {
 
 function rsaEncrypt(text, pubKey, modulus) {
   const _text = text.split('').reverse().join('')
-  const biText = bigInt(new Buffer(_text).toString('hex'), 16),
+  const biText = bigInt(new Buffer.from(_text).toString('hex'), 16),
     biEx = bigInt(pubKey, 16),
     biMod = bigInt(modulus, 16),
     biRet = biText.modPow(biEx, biMod)
