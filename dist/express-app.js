@@ -34,7 +34,7 @@ function () {
       return;
     }
 
-    let data;
+    let data = "";
 
     if (vendor) {
       data = yield _app.default[vendor][method](...params);

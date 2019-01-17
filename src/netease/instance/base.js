@@ -7,13 +7,14 @@ export default function (createInstance) {
     fly.config.baseURL = 'https://music.163.com'
     fly.config.timeout = 5000
     fly.config.headers = {
-        Accept: '*/*',
+        Accept: 'application/json, text/javascript',
         'Accept-Language': 'zh-CN,zh;q=0.8,gl;q=0.6,zh-TW;q=0.4',
         Connection: 'keep-alive',
         // 'X-Real-IP': '223.74.158.213', // 此处加上可以解决海外请求的问题
         'Content-Type': 'application/x-www-form-urlencoded',
         Referer: 'https://music.163.com',
         Host: 'music.163.com',
+        Origin: 'https://music.163.com',
         'User-Agent': randomUserAgent(),
         Cookie: completeCookie()
     }
@@ -33,6 +34,7 @@ export default function (createInstance) {
             params: cryptoreq.params,
             encSecKey: cryptoreq.encSecKey
         }
+        console.log("body ========>", config.body)
         return config
     }, e => Promise.reject(e))
     fly.interceptors.response.use(res => {

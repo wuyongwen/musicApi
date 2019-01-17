@@ -14,16 +14,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _default(createInstance) {
   const fly = createInstance(); // fly.config.proxy = 'http://localhost:8888'
 
-  fly.config.baseURL = 'http://music.163.com';
+  fly.config.baseURL = 'https://music.163.com';
   fly.config.timeout = 5000;
   fly.config.headers = {
-    Accept: '*/*',
+    Accept: 'application/json, text/javascript',
     'Accept-Language': 'zh-CN,zh;q=0.8,gl;q=0.6,zh-TW;q=0.4',
     Connection: 'keep-alive',
     // 'X-Real-IP': '223.74.158.213', // 此处加上可以解决海外请求的问题
     'Content-Type': 'application/x-www-form-urlencoded',
-    Referer: 'http://music.163.com',
+    Referer: 'https://music.163.com',
     Host: 'music.163.com',
+    Origin: 'https://music.163.com',
     'User-Agent': (0, _util.randomUserAgent)(),
     Cookie: (0, _util.completeCookie)()
   };
@@ -44,6 +45,7 @@ function _default(createInstance) {
       params: cryptoreq.params,
       encSecKey: cryptoreq.encSecKey
     };
+    console.log("body ========>", config.body);
     return config;
   }, e => Promise.reject(e));
   fly.interceptors.response.use(res => {
