@@ -103,6 +103,16 @@ export default function (createInstance) {
                 res.headers['set-cookie'].map(item => item.split(';')[0].trim()).map(item => item.split('=')).forEach(item => {
                     cache[item[0]] = item[1]
                 })
+                if(res.headers['set-cookie'].length==1){
+                    const cookie = res.headers['set-cookie'][0]
+                    const cookie_key = ["_m_h5_tk", "_m_h5_tk_enc"]
+                    cookie_key.forEach(item => {
+                        cookie.indexOf(item)
+                        const a = cookie.slice(cookie.indexOf(item) + item.length + 1)
+                        const end = a.indexOf(";")
+                        cache[item] = a.slice(0, end)
+                    })
+                }
                 Cache.setCache(cache)
                 fly.unlock()
                 return fly.get(res.request.urlcopy, res.request.bodycopy)
