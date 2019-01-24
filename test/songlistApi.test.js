@@ -46,11 +46,11 @@ describe('musicApi', () => {
     //     assert.equal(true, songurl.status)
     // })
 
-    // it('虾米音乐 获取歌单详情', async () => {
-    //     const {status, data} = await musicApi.getPlaylistDetail('xiami', xiamiMusic.playlistId)
-    //     console.log(JSON.stringify(data))
-    //     assert.equal(true, status)
-    // });
+    it('虾米音乐 获取歌单详情', async () => {
+        const {status, data} = await musicApi.getPlaylistDetail('xiami', xiamiMusic.playlistId)
+        console.log(JSON.stringify(data))
+        assert.equal(true, status)
+    });
     // it('虾米音乐 获取歌曲详情', async () => {
     //     const detail = await musicApi.getSongDetail('xiami', xiamiMusic.sid)
     //     console.log(detail.data)
@@ -61,12 +61,12 @@ describe('musicApi', () => {
     //     console.log(songurl.data)
     //     assert.equal(true, songurl.status)
     // })
-    it('网络库测试', async () => {
-        let fly = instance();
-        fly.config.headers = {
-            'User-Agent': randomUserAgent()
-        }
-        let data = await fly.head("http://url.cn/5KdjrQb")
-        console.log(data.response.request.uri.href)
-    })
+    // it('网络库测试', async () => {
+    //     let fly = instance();
+    //     fly.config.headers = {
+    //         'User-Agent': randomUserAgent()
+    //     }
+    //     let data = await fly.head("http://url.cn/5KdjrQb")
+    //     console.log(data.response.request.uri.href)
+    // })
 });
