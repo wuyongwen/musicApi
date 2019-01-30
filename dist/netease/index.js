@@ -58,12 +58,14 @@ function _default(instance) {
       id: info.id,
       cp: !privilege.cp,
       dl: !privilege.fee,
+      dt: Math.floor(info.dt / 1000),
       quality: {
         192: privilege.fl >= 192000,
         320: privilege.fl >= 320000,
         999: privilege.fl >= 999000
       },
-      mv: info.mv
+      mv: info.mv,
+      origin: "netease"
     };
   };
 
@@ -87,13 +89,15 @@ function _default(instance) {
       name: info.name,
       id: info.id,
       cp: !privilege.cp,
+      dt: Math.floor(info.dt / 1000),
       dl: !privilege.fee,
       quality: {
         192: privilege.fl >= 192000,
         320: privilege.fl >= 320000,
         999: privilege.fl >= 999000
       },
-      mv: info.mvid
+      mv: info.mvid,
+      origin: "netease"
     };
   };
 

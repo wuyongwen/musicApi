@@ -30,6 +30,7 @@ function _default(instance) {
       id: info.id,
       cp: info.action.msg === 3 || !info.interval,
       dl: !info.pay.pay_down,
+      dt: info.interval,
       quality: {
         // 192: Boolean(file.size_aac || file.size_192aac || file.size_ogg || file.size_192ogg),
         192: false,
@@ -38,7 +39,8 @@ function _default(instance) {
         // 999: Boolean(info.file.size_flac),
         999: false
       },
-      mv: info.mv.vid
+      mv: info.mv.vid,
+      origin: "qq"
     };
   };
 
@@ -59,6 +61,7 @@ function _default(instance) {
       id: info.songid,
       cp: info.msgid === 3 || !info.interval,
       dl: !info.pay.paydownload,
+      dt: info.interval,
       quality: {
         // 192: Boolean(info.sizeogg),
         192: false,
@@ -67,7 +70,8 @@ function _default(instance) {
         // 999: Boolean(info.sizeflac),
         999: false
       },
-      mv: info.vid
+      mv: info.vid,
+      origin: "qq"
     };
   };
 

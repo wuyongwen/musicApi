@@ -24,12 +24,14 @@ export default function (instance) {
             id: info.songId,
             cp: !info.listenFiles.length,
             dl: !info.needPayFlag,
+            dt: Math.floor(info.length / 1000),
             quality: {
                 192: false,
                 320: brObject.h,
                 999: brObject.s,
             },
-            mv: info.mvId
+            mv: info.mvId,
+            origin: "xiami"
         }
     }
     const getMusicInfo2 = info => {
@@ -52,12 +54,14 @@ export default function (instance) {
             id: info.song_id,
             cp: !info.listen_file,
             dl: !info.need_pay_flag,
+            dt: Math.floor(info.length / 1000),
             quality: {
                 192: false,
                 320: brObject.h,
                 999: brObject.s,
             },
-            mv: false
+            mv: false,
+            origin: "xiami"
         }
     }
     return {
@@ -322,22 +326,41 @@ export default function (instance) {
                 return e
             }
         },
-        async getPlaylistDetail(id, offset, limit) {
-            try {
-                const detailInfo = await this.getPlaylistInfo(id)
-                const detail = detailInfo.status ? detailInfo.data : {}
-                const {songs} = await instance.get('mtop.alimusic.music.list.collectservice.getcollectsongs', {
+        async _getCollectSongs(id, offset, limit) {
+            try{
+                const {songs, pagingVO} = await instance.get('mtop.alimusic.music.list.collectservice.getcollectsongs', {
                     listId: id,
                     pagingVO: {
                         page: offset + 1,
                         pageSize: limit
                     }
                 })
+                return {songs, pagingVO}
+            } catch (e) {
+                return e
+            }
+        },
+        async getPlaylistDetail(id, offset, limit) {
+            try {
+                const detailInfo = await this.getPlaylistInfo(id)
+                const detail = detailInfo.status ? detailInfo.data : {}
+                let all_songs = []
+                let {songs, pagingVO} = await this._getCollectSongs(id, offset, limit)
+                all_songs = all_songs.concat(songs)
+                let {count, page, pageSize, pages} = pagingVO
+                while(page < pages){
+                    console.log(count, page, pages)
+                    const data = await this._getCollectSongs(id, page, pageSize)
+                    all_songs = all_songs.concat(data.songs)
+                    page = data.pagingVO.page
+                    pages = data.pagingVO.pages
+                    pageSize = data.pagingVO.pageSize
+                }
                 return {
                     status: true,
                     data: {
                         detail,
-                        songs: songs.map(item => getMusicInfo(item))
+                        songs: all_songs.map(item => getMusicInfo(item))
                     }
                 }
             } catch (e) {

@@ -5,15 +5,15 @@ import instance from '../src/util/flyio.node'
 import {randomUserAgent} from "../src/util";
 
 export const neteaseMusic = {
-    playlistId: 2541689977, // https://music.163.com/m/playlist?id=2383437785
+    playlistId: 2637246716, // https://music.163.com/#/playlist?id=2637246716
     sid: 463452258,  // 致橡树
 }
 export const qqMusic = {
-    playlistId: 6034995679, // 蹦迪指南：让你Hold住舞池！ https://y.qq.com/n/m/detail/taoge/index.html?id=6188246417
+    playlistId: 6034995679, // 蹦迪指南：让你Hold住舞池！ https://y.qq.com/n/m/detail/taoge/index.html?id=6034995679
     sid: 225689023, // 歌曲ID 喜欢你时风好甜
 }
 export const xiamiMusic = {
-    playlistId: 246295115,  // https://www.xiami.com/collect/246295115
+    playlistId: 709451992,  // https://www.xiami.com/collect/709451992
     sid:2072160,     // https://www.xiami.com/song/2072160
 }
 
@@ -32,10 +32,10 @@ describe('musicApi', () => {
     // });
     //
     // it('网易音乐 获取歌单详情', async () => {
-    //     const {status, data} = await musicApi.getPlaylistDetail('netease', neteaseMusic.playlistId)
-    //     console.log(status)
+    //     const data = await musicApi.getPlaylistDetail('netease', neteaseMusic.playlistId)
+    //     console.log(data.status)
     //     console.log(data)
-    //     assert.equal(true, status)
+    //     assert.equal(true, data.status)
     // });
     // it('网易音乐 获取歌曲详情', async () => {
     //     const detail = await musicApi.getSongDetail('netease', neteaseMusic.sid)
@@ -47,7 +47,7 @@ describe('musicApi', () => {
     // })
 
     it('虾米音乐 获取歌单详情', async () => {
-        const {status, data} = await musicApi.getPlaylistDetail('xiami', xiamiMusic.playlistId)
+        const {status, data} = await musicApi.getPlaylistDetail('xiami', xiamiMusic.playlistId, 0)
         console.log(JSON.stringify(data))
         assert.equal(true, status)
     });

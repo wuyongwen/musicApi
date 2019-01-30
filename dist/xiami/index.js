@@ -36,12 +36,14 @@ function _default(instance) {
       id: info.songId,
       cp: !info.listenFiles.length,
       dl: !info.needPayFlag,
+      dt: Math.floor(info.length / 1000),
       quality: {
         192: false,
         320: brObject.h,
         999: brObject.s
       },
-      mv: info.mvId
+      mv: info.mvId,
+      origin: "xiami"
     };
   };
 
@@ -65,12 +67,14 @@ function _default(instance) {
       id: info.song_id,
       cp: !info.listen_file,
       dl: !info.need_pay_flag,
+      dt: Math.floor(info.length / 1000),
       quality: {
         192: false,
         320: brObject.h,
         999: brObject.s
       },
-      mv: false
+      mv: false,
+      origin: "xiami"
     };
   };
 
@@ -401,14 +405,9 @@ function _default(instance) {
       })();
     },
 
-    getPlaylistDetail(id, offset, limit) {
-      var _this4 = this;
-
+    _getCollectSongs(id, offset, limit) {
       return _asyncToGenerator(function* () {
         try {
-          const detailInfo = yield _this4.getPlaylistInfo(id);
-          const detail = detailInfo.status ? detailInfo.data : {};
-
           const _ref4 = yield instance.get('mtop.alimusic.music.list.collectservice.getcollectsongs', {
             listId: id,
             pagingVO: {
@@ -416,13 +415,52 @@ function _default(instance) {
               pageSize: limit
             }
           }),
-                songs = _ref4.songs;
+                songs = _ref4.songs,
+                pagingVO = _ref4.pagingVO;
+
+          return {
+            songs,
+            pagingVO
+          };
+        } catch (e) {
+          return e;
+        }
+      })();
+    },
+
+    getPlaylistDetail(id, offset, limit) {
+      var _this4 = this;
+
+      return _asyncToGenerator(function* () {
+        try {
+          const detailInfo = yield _this4.getPlaylistInfo(id);
+          const detail = detailInfo.status ? detailInfo.data : {};
+          let all_songs = [];
+
+          let _ref5 = yield _this4._getCollectSongs(id, offset, limit),
+              songs = _ref5.songs,
+              pagingVO = _ref5.pagingVO;
+
+          all_songs = all_songs.concat(songs);
+          let count = pagingVO.count,
+              page = pagingVO.page,
+              pageSize = pagingVO.pageSize,
+              pages = pagingVO.pages;
+
+          while (page < pages) {
+            console.log(count, page, pages);
+            const data = yield _this4._getCollectSongs(id, page, pageSize);
+            all_songs = all_songs.concat(data.songs);
+            page = data.pagingVO.page;
+            pages = data.pagingVO.pages;
+            pageSize = data.pagingVO.pageSize;
+          }
 
           return {
             status: true,
             data: {
               detail,
-              songs: songs.map(item => getMusicInfo(item))
+              songs: all_songs.map(item => getMusicInfo(item))
             }
           };
         } catch (e) {
@@ -434,10 +472,10 @@ function _default(instance) {
     getAlbumDetail(id) {
       return _asyncToGenerator(function* () {
         try {
-          const _ref5 = yield instance.get('mtop.alimusic.music.albumservice.getalbumdetail', {
+          const _ref6 = yield instance.get('mtop.alimusic.music.albumservice.getalbumdetail', {
             albumId: id
           }),
-                albumDetail = _ref5.albumDetail;
+                albumDetail = _ref6.albumDetail;
 
           return {
             status: true,
